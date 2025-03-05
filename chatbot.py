@@ -13,7 +13,7 @@ class ChatBot:
         
         try:
             # Initialize the model with the correct name
-            self.model = genai.GenerativeModel('gemini-1.0-pro')
+            self.model = genai.GenerativeModel('gemini-pro')
             
             # Test the model configuration
             response = self.model.generate_content("Test message")
