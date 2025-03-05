@@ -1,4 +1,4 @@
-import google.generativeai as palm
+import google.generativeai as genai
 import os
 
 class ChatBot:
@@ -8,11 +8,18 @@ class ChatBot:
         if not self.api_key:
             raise ValueError("GOOGLE_API_KEY environment variable is not set")
         
-        palm.configure(api_key=self.api_key)
+        # Configure the Gemini API
+        genai.configure(api_key=self.api_key)
         
         try:
-            # Initialize the model
-            self.model = palm.GenerativeModel('gemini-pro')
+            # Initialize the model with the correct name
+            self.model = genai.GenerativeModel('gemini-1.0-pro')
+            
+            # Test the model configuration
+            response = self.model.generate_content("Test message")
+            if not response:
+                raise Exception("Failed to initialize Gemini model")
+                
         except Exception as e:
             print(f"Error initializing Gemini model: {str(e)}")
             raise
