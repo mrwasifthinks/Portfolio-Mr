@@ -8,6 +8,17 @@ CORS(app)  # Enable CORS for all routes
 
 chatbot = ChatBot()
 
+@app.route('/', methods=['GET'])
+def root():
+    return jsonify({
+        'status': 'online',
+        'message': 'Portfolio Chatbot API is running',
+        'endpoints': {
+            'chat': '/api/chat',
+            'health': '/health'
+        }
+    })
+
 @app.route('/api/chat', methods=['POST'])
 def chat():
     try:
@@ -18,10 +29,13 @@ def chat():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Health check endpoint
 @app.route('/health', methods=['GET'])
 def health_check():
-    return jsonify({'status': 'healthy'}), 200
+    return jsonify({
+        'status': 'healthy',
+        'version': '1.0.0',
+        'google_api': 'configured' if os.environ.get('GOOGLE_API_KEY') else 'missing'
+    }), 200
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
