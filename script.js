@@ -347,9 +347,33 @@ function updateThemeIcon(theme) {
     }
 }
 
+// Chatbot Configuration
+const BACKEND_URL = 'https://portfolio-mr.onrender.com';  // Update this with your actual Render backend URL
+
+async function sendMessage(message) {
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/chat`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to get response from server');
+        }
+
+        const data = await response.json();
+        return data.response;
+    } catch (error) {
+        console.error('Error sending message:', error);
+        throw error;
+    }
+}
+
 // Chatbot Functionality
 document.addEventListener('DOMContentLoaded', () => {
-    const API_URL = 'https://portfolio-mr.onrender.com'; // Replace xxxx with your actual Render subdomain
     const chatbotToggle = document.querySelector('.chatbot-toggle');
     const chatbotDialog = document.querySelector('.chatbot-dialog');
     const minimizeBtn = document.querySelector('.minimize-btn');
@@ -381,25 +405,6 @@ document.addEventListener('DOMContentLoaded', () => {
         chatbotDialog.classList.remove('active');
         chatbotToggle.style.display = 'flex';
     });
-
-    // Send message function
-    async function sendMessage(message) {
-        try {
-            const response = await fetch('https://your-service-name.onrender.com/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message: message })
-            });
-            
-            const data = await response.json();
-            return data.response;
-        } catch (error) {
-            console.error('Error:', error);
-            return 'Sorry, I encountered an error. Please try again.';
-        }
-    }
 
     // Add message to chat
     function addMessage(type, text) {
