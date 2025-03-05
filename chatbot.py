@@ -4,11 +4,18 @@ import os
 class ChatBot:
     def __init__(self):
         # Initialize Gemini API
-        self.api_key = os.environ.get('GOOGLE_API_KEY', 'AIzaSyDL8oFmLM0sZfdNQcWaOpQoWPK5FHBQHXE')
+        self.api_key = os.environ.get('GOOGLE_API_KEY')
+        if not self.api_key:
+            raise ValueError("GOOGLE_API_KEY environment variable is not set")
+        
         palm.configure(api_key=self.api_key)
         
-        # Initialize the model
-        self.model = palm.GenerativeModel('gemini-pro')
+        try:
+            # Initialize the model
+            self.model = palm.GenerativeModel('gemini-pro')
+        except Exception as e:
+            print(f"Error initializing Gemini model: {str(e)}")
+            raise
         
         # Detailed portfolio context
         self.portfolio_context = {
@@ -80,14 +87,18 @@ class ChatBot:
         }
 
     def get_gemini_response(self, user_input):
+        if not user_input or not user_input.strip():
+            return "I didn't receive any input. Could you please ask a question?"
+
         try:
             # First, detect if the question is about portfolio/creator/chatbot
             detection_prompt = f"""Determine if this question is about Wasif Azim's portfolio, the Zim Flash chatbot, or Wasif Azim himself: "{user_input}"
             Return only "PORTFOLIO", "PERSONAL", or "GENERAL" as a single word."""
             
-            detection = self.model.generate_content(
-                prompt=detection_prompt
-            )
+            detection = self.model.generate_content(detection_prompt)
+            
+            if not detection or not detection.text:
+                raise Exception("Failed to get response from Gemini API")
             
             if "PORTFOLIO" in detection.text.upper() or "PERSONAL" in detection.text.upper():
                 # Portfolio or personal-related response
@@ -122,20 +133,26 @@ class ChatBot:
                 
                 Provide a natural, conversational response."""
 
-            response = self.model.generate_content(
-                prompt=prompt
-            )
-            return response.text
+            response = self.model.generate_content(prompt)
+            
+            if not response or not response.text:
+                raise Exception("Failed to get response from Gemini API")
+                
+            return response.text.strip()
             
         except Exception as e:
             print(f"API Error: {str(e)}")
-            return "I apologize, but I'm having trouble generating a response. Please try asking your question in a different way."
+            return "I apologize, but I'm having trouble generating a response right now. Please try again in a moment."
 
     def get_response(self, user_input):
-        print(f"\nUser Input: {user_input}")  # Debug log
-        response = self.get_gemini_response(user_input)
-        print(f"Bot Response: {response}")  # Debug log
-        return response
+        try:
+            print(f"\nUser Input: {user_input}")  # Debug log
+            response = self.get_gemini_response(user_input)
+            print(f"Bot Response: {response}")  # Debug log
+            return response
+        except Exception as e:
+            print(f"Error in get_response: {str(e)}")
+            return "I encountered an unexpected error. Please try again later."
 
 if __name__ == "__main__":
     chatbot = ChatBot()
