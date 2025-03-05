@@ -1,10 +1,14 @@
-from google import genai 
+import google.generativeai as palm
+import os
 
 class ChatBot:
     def __init__(self):
         # Initialize Gemini API
-        self.api_key = "AIzaSyDL8oFmLM0sZfdNQcWaOpQoWPK5FHBQHXE"
-        self.client = genai.Client(api_key=self.api_key)
+        self.api_key = os.environ.get('GOOGLE_API_KEY', 'AIzaSyDL8oFmLM0sZfdNQcWaOpQoWPK5FHBQHXE')
+        palm.configure(api_key=self.api_key)
+        
+        # Initialize the model
+        self.model = palm.GenerativeModel('gemini-pro')
         
         # Detailed portfolio context
         self.portfolio_context = {
@@ -13,7 +17,7 @@ class ChatBot:
                 'location': 'West Bengal, India',
                 'role': 'Frontend Developer',
                 'chatbot_name': 'Zim Flash',
-                'portfolio_url': 'https://wasifazim.netlify.app'
+                'portfolio_url': 'https://mrwasif.netlify.app'
             },
             'skills': {
                 'frontend': ['HTML', 'CSS', 'JavaScript', 'React'],
@@ -81,9 +85,8 @@ class ChatBot:
             detection_prompt = f"""Determine if this question is about Wasif Azim's portfolio, the Zim Flash chatbot, or Wasif Azim himself: "{user_input}"
             Return only "PORTFOLIO", "PERSONAL", or "GENERAL" as a single word."""
             
-            detection = self.client.models.generate_content(
-                model="gemini-2.0-flash",
-                contents=detection_prompt
+            detection = self.model.generate_content(
+                prompt=detection_prompt
             )
             
             if "PORTFOLIO" in detection.text.upper() or "PERSONAL" in detection.text.upper():
@@ -119,9 +122,8 @@ class ChatBot:
                 
                 Provide a natural, conversational response."""
 
-            response = self.client.models.generate_content(
-                model="gemini-2.0-flash",
-                contents=prompt
+            response = self.model.generate_content(
+                prompt=prompt
             )
             return response.text
             

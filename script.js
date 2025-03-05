@@ -349,7 +349,7 @@ function updateThemeIcon(theme) {
 
 // Chatbot Functionality
 document.addEventListener('DOMContentLoaded', () => {
-    const API_URL = 'https://your-portfolio-backend.onrender.com'; // Update this with your Render URL
+    const API_URL = 'https://portfolio-mr.onrender.com'; // Replace xxxx with your actual Render subdomain
     const chatbotToggle = document.querySelector('.chatbot-toggle');
     const chatbotDialog = document.querySelector('.chatbot-dialog');
     const minimizeBtn = document.querySelector('.minimize-btn');
@@ -383,7 +383,45 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Send message function
-    async function sendMessage() {
+    async function sendMessage(message) {
+        try {
+            const response = await fetch('https://your-service-name.onrender.com/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
+            });
+            
+            const data = await response.json();
+            return data.response;
+        } catch (error) {
+            console.error('Error:', error);
+            return 'Sorry, I encountered an error. Please try again.';
+        }
+    }
+
+    // Add message to chat
+    function addMessage(type, text) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${type}-message`;
+        
+        messageDiv.innerHTML = `
+            ${type === 'bot' ? `<img src="images/chatbot_logo.webp" alt="Bot" class="message-avatar">` : ''}
+            <div class="message-content">
+                <p>${text}</p>
+            </div>
+            ${type === 'user' ? `<img src="images/user-avatar.png" alt="User" class="message-avatar">` : ''}
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+        
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Send message on button click
+    sendBtn.addEventListener('click', async () => {
         const message = userInput.value.trim();
         if (message !== '') {
             // Add user message
@@ -412,58 +450,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 chatMessages.scrollTop = chatMessages.scrollHeight;
 
                 // Make API call to Flask server
-                const response = await fetch(`${API_URL}/api/chat`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ message: message })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to get response from server');
-                }
-
-                const data = await response.json();
+                const botResponse = await sendMessage(message);
                 
                 // Remove typing indicator
                 chatMessages.removeChild(typingIndicator);
                 
                 // Add bot response
-                addMessage('bot', data.response);
+                addMessage('bot', botResponse);
             } catch (error) {
                 console.error('Error:', error);
                 addMessage('bot', 'I apologize, but I encountered an error. Please try again.');
             }
         }
-    }
-
-    // Add message to chat
-    function addMessage(type, text) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${type}-message`;
-        
-        messageDiv.innerHTML = `
-            ${type === 'bot' ? `<img src="images/chatbot_logo.webp" alt="Bot" class="message-avatar">` : ''}
-            <div class="message-content">
-                <p>${text}</p>
-            </div>
-            ${type === 'user' ? `<img src="images/user-avatar.png" alt="User" class="message-avatar">` : ''}
-        `;
-        
-        chatMessages.appendChild(messageDiv);
-        
-        // Scroll to bottom
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    // Send message on button click
-    sendBtn.addEventListener('click', sendMessage);
+    });
 
     // Send message on Enter key
-    userInput.addEventListener('keypress', (e) => {
+    userInput.addEventListener('keypress', async (e) => {
         if (e.key === 'Enter') {
-            sendMessage();
+            const message = userInput.value.trim();
+            if (message !== '') {
+                await sendMessage(message);
+            }
         }
     });
 
