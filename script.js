@@ -24,7 +24,7 @@ document.querySelectorAll('.navbar a').forEach(link => {
 });
 
 // Initialize EmailJS
-emailjs.init("YOUR_USER_ID");
+emailjs.init("1VhiAP0LG1F_aXTOQ");
 
 // Enhanced Form Submission with Animation
 const contactForm = document.getElementById('contactForm');
@@ -43,7 +43,7 @@ contactForm.addEventListener('submit', async function(e) {
     submitBtn.disabled = true;
 
     try {
-        await emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', this, 'YOUR_USER_ID');
+        await emailjs.sendForm('service_h8lpqdx', 'template_gn0p3ex', this, '1VhiAP0LG1F_aXTOQ');
         
         // Success animation
         submitBtn.classList.add('success');
