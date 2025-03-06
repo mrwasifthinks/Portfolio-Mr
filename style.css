@@ -20,10 +20,13 @@
 /* Light Theme Variables */
 [data-theme="light"] {
     --bg-color: #ffffff;
-    --second-bg-color: #f5f5f5;
-    --text-color: #333333;
-    --main-color: #00a8a0;
-    --glow-color: #e9f2f2;
+    --second-bg-color: #f8f9fa;
+    --text-color: #2c3e50;
+    --main-color: #2563eb;
+    --glow-color: rgba(37, 99, 235, 0.2);
+    --header-bg: rgba(255, 255, 255, 0.9);
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
 html {
@@ -1707,4 +1710,67 @@ span{
 @keyframes typing {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-5px); }
+}
+
+[data-theme="light"] .header {
+    background: var(--header-bg);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .project-card {
+    background: var(--bg-color);
+    box-shadow: var(--card-shadow);
+}
+
+[data-theme="light"] .project-card:hover {
+    box-shadow: var(--hover-shadow);
+}
+
+[data-theme="light"] .timeline-content {
+    background: var(--bg-color);
+    box-shadow: var(--card-shadow);
+}
+
+[data-theme="light"] .timeline-content:hover {
+    box-shadow: var(--hover-shadow);
+}
+
+[data-theme="light"] .skill-box {
+    background: var(--bg-color);
+    box-shadow: var(--card-shadow);
+}
+
+[data-theme="light"] .skill-box:hover {
+    box-shadow: var(--hover-shadow);
+}
+
+[data-theme="light"] .contact-form {
+    background: var(--bg-color);
+    box-shadow: var(--card-shadow);
+}
+
+[data-theme="light"] .input-group input,
+[data-theme="light"] .input-group textarea {
+    background: var(--second-bg-color);
+    color: var(--text-color);
+    border: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .input-group label {
+    color: #64748b;
+}
+
+[data-theme="light"] .btn {
+    color: white;
+}
+
+[data-theme="light"] .social-icons {
+    border-color: var(--main-color);
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+}
+
+[data-theme="light"] .social-icons:hover {
+    background: var(--main-color);
+    color: white;
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
 }
