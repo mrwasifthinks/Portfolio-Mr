@@ -108,7 +108,7 @@ class ChatBot:
             detection_prompt = f"""Determine if this question is about Wasif Azim's portfolio, the Zim Flash chatbot, or Wasif Azim himself: "{user_input}"
             Return only "PORTFOLIO", "PERSONAL", or "GENERAL" as a single word."""
             
-            detection = self.model.generate_content(text=detection_prompt)
+            detection = self.model.generate_content(detection_prompt)
             
             if not detection or not detection.text:
                 raise Exception("Failed to get response from Gemini API")
@@ -146,7 +146,7 @@ class ChatBot:
                 
                 Provide a natural, conversational response."""
 
-            response = self.model.generate_content(text=prompt)
+            response = self.model.generate_content(prompt)
             
             if not response or not response.text:
                 raise Exception("Failed to get response from Gemini API")
