@@ -14,17 +14,9 @@ class ChatBot:
             
             # List available models
             models = genai.list_models()
-            model_name = None
-            for model in models:
-                if 'gemini-pro' in model.name:
-                    model_name = model.name
-                    break
             
-            if not model_name:
-                raise ValueError("Gemini Pro model not found in available models")
-            
-            # Initialize the model
-            self.model = genai.GenerativeModel(model_name)
+            # Use gemini-1.5-flash (the recommended replacement)
+            self.model = genai.GenerativeModel('gemini-1.5-flash')
             
         except Exception as e:
             print(f"Error initializing Gemini model: {str(e)}")
