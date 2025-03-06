@@ -8,121 +8,93 @@ class ChatBot:
         if not self.api_key:
             raise ValueError("GOOGLE_API_KEY environment variable is not set")
         
-        # Configure the Gemini API with the latest version
+        # Configure the Gemini API
         genai.configure(api_key=self.api_key)
         
         try:
-            # Initialize the model with specific generation config
-            generation_config = {
-                "temperature": 0.7,
-                "top_p": 0.8,
-                "top_k": 40,
-                "max_output_tokens": 2048,
-            }
+            # Initialize the model with basic configuration
+            self.model = genai.GenerativeModel('gemini-pro')
             
-            safety_settings = [
-                {
-                    "category": "HARM_CATEGORY_HARASSMENT",
-                    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-                },
-                {
-                    "category": "HARM_CATEGORY_HATE_SPEECH",
-                    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-                },
-                {
-                    "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-                },
-                {
-                    "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-                    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-                }
-            ]
-            
-            self.model = genai.GenerativeModel(
-                model_name="gemini-pro",
-                generation_config=generation_config,
-                safety_settings=safety_settings
+            # Configure the model settings
+            self.model.generation_config = genai.types.GenerationConfig(
+                temperature=0.7,
+                top_p=0.8,
+                top_k=40,
+                max_output_tokens=2048,
             )
             
-            # Test the model configuration with a simple prompt
-            chat = self.model.start_chat(history=[])
-            response = chat.send_message("Hi")
-            if not response or not response.text:
-                raise Exception("Failed to initialize Gemini model")
-                
+            # Detailed portfolio context
+            self.portfolio_context = {
+                'personal_info': {
+                    'name': 'Wasif Azim',
+                    'location': 'West Bengal, India',
+                    'role': 'Frontend Developer',
+                    'chatbot_name': 'Zim Flash',
+                    'portfolio_url': 'https://mrwasif.netlify.app'
+                },
+                'skills': {
+                    'frontend': ['HTML', 'CSS', 'JavaScript', 'React'],
+                    'backend': ['Node.js', 'Python'],
+                    'design': ['UI/UX Design', 'Video Editing'],
+                    'other': ['Arduino', 'IoT', 'AI/ML'],
+                    'tools': ['Canva']
+                },
+                'projects': [
+                    {
+                        'name': 'AI-Powered Smart Home',
+                        'technologies': ['Arduino', 'IoT', 'Python', 'ML'],
+                        'features': [
+                            'Automated temperature control',
+                            'Smart lighting system',
+                            'Security monitoring',
+                            'Energy usage optimization'
+                        ]
+                    },
+                    {
+                        'name': 'School Management System',
+                        'technologies': ['React', 'Node.js', 'MongoDB', 'Express'],
+                        'features': [
+                            'Student attendance tracking',
+                            'Grade management system',
+                            'Parent communication portal',
+                            'Administrative dashboard'
+                        ]
+                    },
+                    {
+                        'name': 'E-Commerce Platform',
+                        'technologies': ['Next.js', 'TypeScript', 'Stripe', 'Tailwind'],
+                        'features': [
+                            'Product catalog management',
+                            'Secure payment processing',
+                            'Order tracking system',
+                            'Admin dashboard'
+                        ]
+                    }
+                ],
+                'education': [
+                    {
+                        'level': 'Secondary Education',
+                        'school': 'Sargachi Ramakrishna Mission High School (H.S.)',
+                        'period': '2020 - 2025 (Current)',
+                        'location': 'Sargachi, Murshidabad, WB, India'
+                    },
+                    {
+                        'level': 'Primary Education',
+                        'school': 'Pranab Bharati',
+                        'period': '2013 - 2019',
+                        'location': 'Beldanga, Murshidabad, WB, India'
+                    }
+                ],
+                'contact': {
+                    'email': 'your.email@example.com',
+                    'phone': '9153077332',
+                    'linkedin': 'https://www.linkedin.com/in/wasif-azim-390a3434a'
+                }
+            }
+            
         except Exception as e:
             print(f"Error initializing Gemini model: {str(e)}")
             raise
-        
-        # Detailed portfolio context
-        self.portfolio_context = {
-            'personal_info': {
-                'name': 'Wasif Azim',
-                'location': 'West Bengal, India',
-                'role': 'Frontend Developer',
-                'chatbot_name': 'Zim Flash',
-                'portfolio_url': 'https://mrwasif.netlify.app'
-            },
-            'skills': {
-                'frontend': ['HTML', 'CSS', 'JavaScript', 'React'],
-                'backend': ['Node.js', 'Python'],
-                'design': ['UI/UX Design', 'Video Editing'],
-                'other': ['Arduino', 'IoT', 'AI/ML'],
-                'tools': ['Canva']
-            },
-            'projects': [
-                {
-                    'name': 'AI-Powered Smart Home',
-                    'technologies': ['Arduino', 'IoT', 'Python', 'ML'],
-                    'features': [
-                        'Automated temperature control',
-                        'Smart lighting system',
-                        'Security monitoring',
-                        'Energy usage optimization'
-                    ]
-                },
-                {
-                    'name': 'School Management System',
-                    'technologies': ['React', 'Node.js', 'MongoDB', 'Express'],
-                    'features': [
-                        'Student attendance tracking',
-                        'Grade management system',
-                        'Parent communication portal',
-                        'Administrative dashboard'
-                    ]
-                },
-                {
-                    'name': 'E-Commerce Platform',
-                    'technologies': ['Next.js', 'TypeScript', 'Stripe', 'Tailwind'],
-                    'features': [
-                        'Product catalog management',
-                        'Secure payment processing',
-                        'Order tracking system',
-                        'Admin dashboard'
-                    ]
-                }
-            ],
-            'education': [
-                {
-                    'level': 'Secondary Education',
-                    'school': 'Sargachi Ramakrishna Mission High School (H.S.)',
-                    'period': '2020 - 2025 (Current)',
-                    'location': 'Sargachi, Murshidabad, WB, India'
-                },
-                {
-                    'level': 'Primary Education',
-                    'school': 'Pranab Bharati',
-                    'period': '2013 - 2019',
-                    'location': 'Beldanga, Murshidabad, WB, India'
-                }
-            ],
-            'contact': {
-                'email': 'your.email@example.com',
-                'phone': '9153077332',
-                'linkedin': 'https://www.linkedin.com/in/wasif-azim-390a3434a'
-            }
-        }
 
     def get_gemini_response(self, user_input):
         if not user_input or not user_input.strip():
@@ -130,17 +102,13 @@ class ChatBot:
 
         try:
             # First, detect if the question is about portfolio/creator/chatbot
-            chat = self.model.start_chat(history=[])
             detection_prompt = f"""Determine if this question is about Wasif Azim's portfolio, the Zim Flash chatbot, or Wasif Azim himself: "{user_input}"
             Return only "PORTFOLIO", "PERSONAL", or "GENERAL" as a single word."""
             
-            detection = chat.send_message(detection_prompt)
+            detection = self.model.generate_content(detection_prompt)
             
             if not detection or not detection.text:
                 raise Exception("Failed to get response from Gemini API")
-            
-            # Start a new chat for the actual response
-            response_chat = self.model.start_chat(history=[])
             
             if "PORTFOLIO" in detection.text.upper() or "PERSONAL" in detection.text.upper():
                 # Portfolio or personal-related response
@@ -175,7 +143,7 @@ class ChatBot:
                 
                 Provide a natural, conversational response."""
 
-            response = response_chat.send_message(prompt)
+            response = self.model.generate_content(prompt)
             
             if not response or not response.text:
                 raise Exception("Failed to get response from Gemini API")
