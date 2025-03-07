@@ -481,27 +481,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log('Chatbot initialized successfully');
 });
-
-// Project Card Flip functionality for mobile
-document.addEventListener('DOMContentLoaded', function() {
-    const projectCards = document.querySelectorAll('.project-card');
-    
-    // Check if device is touch-enabled
-    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    
-    if (isTouchDevice) {
-        projectCards.forEach(card => {
-            card.addEventListener('click', function() {
-                // Toggle the flipped class
-                this.classList.toggle('flipped');
-                
-                // Remove flipped class from other cards
-                projectCards.forEach(otherCard => {
-                    if (otherCard !== this && otherCard.classList.contains('flipped')) {
-                        otherCard.classList.remove('flipped');
-                    }
-                });
-            });
-        });
-    }
-});
