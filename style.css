@@ -524,30 +524,52 @@ span{
     }
 
     .home {
-        flex-direction: column-reverse;
+        flex-direction: column;
         padding-top: 12rem;
-        gap: 3rem;
+        gap: 2rem;
     }
-
+    
     .home-content {
+        display: flex;
+        flex-direction: column;
         text-align: center;
         align-items: center;
         padding: 0 2rem;
+        order: 0;
+    }
+    
+    .home-content h1,
+    .home-content h3:first-of-type {
+        order: -1;
+    }
+    
+    .home-img {
+        order: 0;
+        margin: 2rem 0;
+    }
+    
+    .home-content p,
+    .home-content h3:not(:first-of-type),
+    .home-content .social-media,
+    .home-content .btn-group {
+        order: 1;
     }
     
     .home-content h1 {
         font-size: 5rem;
+        margin-bottom: 1rem;
     }
     
     .home-content h3 {
         font-size: 2.5rem;
+        margin: 1rem 0;
     }
-
+    
     .home-img img {
         width: 250px;
         height: 250px;
         object-fit: cover;
-        margin-top: 0;
+        margin: 2rem auto;
     }
     
     .btn-group {
@@ -647,6 +669,7 @@ span{
     .home-img img {
         width: 200px;
         height: 200px;
+        margin: 1.5rem auto;
     }
     
     .heading {
@@ -1503,13 +1526,45 @@ span{
     
     .home-content {
         display: flex;
-        align-items: center;
+        flex-direction: column;
         text-align: center;
+        align-items: center;
+        padding: 0 2rem;
+        order: 0;
+    }
+    
+    .home-content h1,
+    .home-content h3:first-of-type {
+        order: -1;
+    }
+    
+    .home-img {
+        order: 0;
+        margin: 2rem 0;
+    }
+    
+    .home-content p,
+    .home-content h3:not(:first-of-type),
+    .home-content .social-media,
+    .home-content .btn-group {
+        order: 1;
+    }
+    
+    .home-content h1 {
+        font-size: 5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .home-content h3 {
+        font-size: 2.5rem;
+        margin: 1rem 0;
     }
     
     .home-img img {
-        width: 70vw;
-        margin-top: 4rem;
+        width: 250px;
+        height: 250px;
+        object-fit: cover;
+        margin: 2rem auto;
     }
     
     .contact-wrapper {
