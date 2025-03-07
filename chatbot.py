@@ -28,7 +28,7 @@ class ChatBot:
                 'name': 'Wasif Azim',
                 'location': 'West Bengal, India',
                 'role': 'Frontend Developer',
-                'chatbot_name': 'Zim Flash',
+            'chatbot_name': 'Zim Flash',
                 'portfolio_url': 'https://mrwasif.netlify.app'
             },
             'skills': {
