@@ -528,7 +528,7 @@ span{
         padding-top: 12rem;
         gap: 2rem;
     }
-    
+
     .home-content {
         display: flex;
         flex-direction: column;
@@ -571,7 +571,7 @@ span{
         object-fit: cover;
         margin: 2rem auto;
     }
-    
+
     .btn-group {
         flex-direction: row;
         flex-wrap: wrap;
@@ -1335,29 +1335,44 @@ span{
 }
 
 .submit-btn {
-    position: relative;
-    overflow: hidden;
+    display: inline-block;
+    padding: 1rem 2.8rem;
     background: var(--main-color);
-    color: var(--bg-color);
-    padding: 15px 40px;
-    border-radius: 30px;
+    box-shadow: 0 0 25px var(--main-color);
+    border-radius: 4rem;
     font-size: 1.6rem;
+    color: black;
+    border: 2px solid transparent;
+    letter-spacing: 0.1rem;
     font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: none;
     width: 100%;
     max-width: 250px;
     margin: 0 auto;
 }
 
+.submit-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 50px var(--main-color);
+}
+
 .submit-btn i {
     font-size: 2rem;
     transition: transform 0.3s ease;
+    color: black !important;
+}
+
+[data-theme="light"] .submit-btn {
+    color: black !important;
+}
+
+[data-theme="light"] .submit-btn i {
+    color: black !important;
 }
 
 .submit-btn:hover i {
@@ -1885,6 +1900,10 @@ span{
 
 .chatbot-input .send-btn i {
     font-size: 1.8rem;
+    color: var(--bg-color);
+}
+
+[data-theme="light"] .chatbot-input .send-btn i {
     color: var(--bg-color);
 }
 
