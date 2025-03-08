@@ -481,3 +481,88 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log('Chatbot initialized successfully');
 });
+
+// Mobile Animation Handlers
+function handleMobileAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    // Observe skill boxes
+    document.querySelectorAll('.skill-box').forEach(box => {
+        observer.observe(box);
+    });
+
+    // Observe project cards
+    document.querySelectorAll('.project-card').forEach(card => {
+        observer.observe(card);
+    });
+}
+
+// Enhanced Mobile Menu
+function enhanceMobileMenu() {
+    const menuIcon = document.querySelector('#menu-icon');
+    const navbar = document.querySelector('.navbar');
+    const navLinks = document.querySelectorAll('.navbar a');
+
+    menuIcon.addEventListener('click', () => {
+        menuIcon.classList.toggle('bx-x');
+        navbar.classList.toggle('active');
+        
+        // Animate links sequentially
+        navLinks.forEach((link, index) => {
+            if (link.style.animation) {
+                link.style.animation = '';
+            } else {
+                link.style.animation = `fadeInUp 0.5s ease forwards ${index * 0.1 + 0.2}s`;
+            }
+        });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!menuIcon.contains(e.target) && !navbar.contains(e.target)) {
+            menuIcon.classList.remove('bx-x');
+            navbar.classList.remove('active');
+            navLinks.forEach(link => {
+                link.style.animation = '';
+            });
+        }
+    });
+
+    // Smooth scroll for mobile
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+            
+            menuIcon.classList.remove('bx-x');
+            navbar.classList.remove('active');
+            
+            window.scrollTo({
+                top: targetSection.offsetTop - 80,
+                behavior: 'smooth'
+            });
+        });
+    });
+}
+
+// Initialize mobile features
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.innerWidth <= 768) {
+        handleMobileAnimations();
+        enhanceMobileMenu();
+    }
+});
+
+// Handle resize events
+window.addEventListener('resize', () => {
+    if (window.innerWidth <= 768) {
+        handleMobileAnimations();
+    }
+});
