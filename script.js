@@ -518,7 +518,7 @@ function enhanceMobileMenu() {
             if (link.style.animation) {
                 link.style.animation = '';
             } else {
-                link.style.animation = `fadeInUp 0.5s ease forwards ${index * 0.1 + 0.2}s`;
+                link.style.animation = `slideInRight 0.3s ease forwards ${index * 0.1}s`;
             }
         });
     });
@@ -534,18 +534,40 @@ function enhanceMobileMenu() {
         }
     });
 
-    // Smooth scroll for mobile
+    // Handle active state on scroll
+    window.addEventListener('scroll', () => {
+        const sections = document.querySelectorAll('section');
+        const scrollY = window.scrollY;
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+
+            if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${sectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    });
+
+    // Smooth scroll with offset
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const targetId = link.getAttribute('href');
             const targetSection = document.querySelector(targetId);
+            const offset = window.innerWidth <= 768 ? 80 : 100;
             
             menuIcon.classList.remove('bx-x');
             navbar.classList.remove('active');
             
             window.scrollTo({
-                top: targetSection.offsetTop - 80,
+                top: targetSection.offsetTop - offset,
                 behavior: 'smooth'
             });
         });
@@ -554,9 +576,9 @@ function enhanceMobileMenu() {
 
 // Initialize mobile features
 document.addEventListener('DOMContentLoaded', () => {
+    enhanceMobileMenu();
     if (window.innerWidth <= 768) {
         handleMobileAnimations();
-        enhanceMobileMenu();
     }
 });
 
